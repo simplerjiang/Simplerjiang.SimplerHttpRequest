@@ -42,8 +42,13 @@ namespace Simplerjiang.SimpleHttpRequest
                 client.DefaultRequestHeaders.Add("Method", "GET");
                 client.DefaultRequestHeaders.Add("Accept", "text/html, application/xhtml+xml, */*");
                 client.DefaultRequestHeaders.Add("ContentType", "application/json");
-                Task<HttpResponseMessage> response = client.GetAsync(url);
-
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                
+                if (response.StatusCode == System.Net.HttpStatusCode.OK //200
+                    || response.StatusCode == System.Net.HttpStatusCode.Created //201
+                    || response.StatusCode == System.Net.HttpStatusCode.Accepted //202
+                    || response.StatusCode == System.Net.HttpStatusCode.NonAuthoritativeInformation //203
+                    || response.StatusCode == System.Net.HttpStatusCode.NoContent //)
             }
 
         }
