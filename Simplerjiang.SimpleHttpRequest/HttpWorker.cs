@@ -2,38 +2,57 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Simplerjiang.SimpleHttpRequest
 {
     public class HttpWorker
     {
-        internal static HttpResult HttpGet(string url)
+        public static HttpResult HttpGet(string url)
         {
             HttpResult httpResult = new HttpResult();
+            //try
+            //{
+            //    //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
+            //    Encoding encoding = Encoding.UTF8;
+            //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //    request.Method = "GET";
+            //    request.Accept = "text/html, application/xhtml+xml, */*";
+            //    request.ContentType = "application/json";
+            //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            //    using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+            //    {
+            //        httpResult.result = reader.ReadToEnd();
+            //        httpResult.stat = response.StatusCode;
+            //        return httpResult;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    httpResult.errorMessage = ex.Message;
+            //    httpResult.stat = HttpStatusCode.BadRequest;
+            //    return httpResult;
+            //}
+            HttpClient client = new HttpClient();
             try
             {
-                //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-                Encoding encoding = Encoding.UTF8;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.Method = "GET";
-                request.Accept = "text/html, application/xhtml+xml, */*";
-                request.ContentType = "application/json";
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
-                {
-                    httpResult.result = reader.ReadToEnd();
-                    httpResult.stat = response.StatusCode;
-                    return httpResult;
-                }
+                //Clear Headers First
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add("Method", "GET");
+                client.DefaultRequestHeaders.Add("Accept", "text/html, application/xhtml+xml, */*");
+                client.DefaultRequestHeaders.Add("ContentType", "application/json");
+                Task<HttpResponseMessage> response = client.GetAsync(url);
+
             }
-            catch (Exception ex)
-            {
-                httpResult.errorMessage = ex.Message;
-                httpResult.stat = HttpStatusCode.BadRequest;
-                return httpResult;
-            }
+
         }
+
+
+
+
+
+
         internal static HttpResult HttpPost(string url, string body)
         {
             HttpResult httpResult = new HttpResult();
